@@ -9,7 +9,7 @@ class Command(BaseCommand):
         try:
             conn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+HOST+';DATABASE='+DATABASE+';UID='+USER+';PWD='+PASSWORD)
             conn.autocommit = True
-            conn.execute(fr"CREATE DATABASE DjangoDB")
+            conn.execute(fr"CREATE DATABASE ShelterDOG")
         except pyodbc.ProgrammingError as ex:
             print(ex)
         else:
