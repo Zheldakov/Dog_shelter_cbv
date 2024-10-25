@@ -1,0 +1,24 @@
+{% extends 'dogs/base.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="col-md-4">
+    <div class='card md-4 box-shadow'>
+        <img class="card-img-top" src="{{ object.photo|mymedia }}" width="300" height="320" alt="Card image cap">
+        <div class="card-body">
+            <p class="card-text">{{ object.name|title }}</p>
+            <span class="text-muted">{{ object.birth_date|default:"-" }}</span>
+            <br>
+            <span class="text-muted">{{ object.owner|default:"Без хозяина" }}</span>
+            {% if object.owner.phone is not none %}
+            <br>
+                <span class="text-muted">{{ object.owner.phone }}</span>
+            {% endif %}
+
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-link" href="{% url 'dogs:update_dog' object.pk %}">обновить</a>
+            <a class="btn btn-link" href="{% url 'dogs:delete_dog' object.pk %}">удалить</a>
+        </div>
+    </div>
+</div>
+   {% endblock %}

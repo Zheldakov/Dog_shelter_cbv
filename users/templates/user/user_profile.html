@@ -1,0 +1,24 @@
+{% extends 'dogs/base.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="row">
+    <div class="col-3"></div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">Профиль пользователя</div>
+            <img class="card-img-top"
+                 src="{{ user.avatar|user_media }}" width="300" height="700"
+                 alt="Card image cap">
+            <div class="card-body">
+                <form enctype="multipart/form-data">
+                    {{ form.as_p }}
+                    <button class="btn btn-outline-warning">
+                        <a class="btn btn-link" href="{% url 'users:update_user' %}">Обновить</a>
+                    </button>
+                </form>
+            </div>
+            <div class="card-footer"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
