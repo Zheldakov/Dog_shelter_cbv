@@ -2,7 +2,7 @@ from django import forms
 
 from users.models import User
 from users.validators import validate_password
-from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
+from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm, AuthenticationForm
 
 
 class StyleFromMixin:
@@ -34,14 +34,13 @@ class UserRegisterForm(StyleFromMixin, UserCreationForm):
         cd = self.cleaned_data
         validate_password(cd['password1'])
         if cd['password1'] != cd['password2']:
-            raise forms.ValidationError('Passwords do not match')
+            raise forms.ValidationError('password_mismatch')
         return cd['password2']
 
 
-class UserLoginForm(StyleFromMixin, forms.Form):
+class UserLoginForm(StyleFromMixin, AuthenticationForm):
     """ Форма для авторизации пользователя."""
-    email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput)
+    pass
 
 
 class UserUpdateForm(StyleFromMixin, forms.ModelForm):

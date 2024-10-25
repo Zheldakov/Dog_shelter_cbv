@@ -23,27 +23,11 @@ class UserRegisterView(CreateView):
     success_url = reverse_lazy('users:login_user')
     template_name = 'user/register_user.html'
 
-def user_login_view(request):
-    # Выводим форму логина
-    if request.method == 'POST':
-        form = UserLoginForm(request.POST)  # Создаем экземпляр формы
-        if form.is_valid():  # Если форма валидна
-            cd = form.cleaned_data  # Очищаем данные
-            # Аутентифицируем пользователя
-            user = authenticate(email=cd['email'], password=cd['password'])
-            if user is not None:  # Если пользователь существует
-                if user.is_active:  # Если пользователь активен
-                    login(request, user)  # Авторизуем пользователя
-                    # Переход на главную страницу питомника
-                    return HttpResponseRedirect(reverse('dogs:index'))
-                else:
-                    return HttpResponse('Аккаунт не активен')
 
-    form = UserLoginForm()
-    context = {
-        'form': form}
-    return render(request, 'user/login_user.html', context)
-
+class UserLoginView(LoginView):
+    """ Логин пользователя."""
+    template_name = 'user/login_user.html'
+    form_class = UserLoginForm
 
 @login_required
 def user_profile_view(request):
