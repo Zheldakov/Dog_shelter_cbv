@@ -41,11 +41,10 @@ class UserProfileView(UpdateView):
     def get_object(self, queryset=None):
         return self.request.user
 
-
-def user_logout_view(request):
-    # выход из системы
-    logout(request)
-    return redirect('dogs:index')
+class UserLogoutView(LogoutView):
+    """ Выход пользователя."""
+    pass
+    # template_name = 'user/logout_user.html'
 
 
 class UserUpdateView(UpdateView):
