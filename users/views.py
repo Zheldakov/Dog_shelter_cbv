@@ -3,28 +3,25 @@ import string
 
 from django.shortcuts import reverse, render, redirect
 
+from django.contrib.auth.views import LoginView, PasswordChangeDoneView, LogoutView
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView
 from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 
+from users.models import User
 from users.forms import UserRegisterForm, UserLoginForm, UserUpdateForm, UserPasswordChangeForm
 from users.services import send_register_email, send_new_password
 
 
-def user_register_view(request):
-    # Вывод формы регистрации
-    form = UserRegisterForm(request.POST)
-    if request.method == 'POST':
-        if form.is_valid():  # Если форма валидна, сохраняем данные
-            new_user = form.save()  # Получаем нового пользователя
-            new_user.set_password(form.cleaned_data['password'])  # Установка пароля
-            new_user.save()  # Сохраняем нового пользователя
-            send_register_email(new_user.email)  # отправка сообщения на почту
-            return HttpResponseRedirect(reverse('users:login_user'))  # Переход на главную страницу питомника
-    context = {'form': form}
-    return render(request, 'user/register_user.html', context)
-
+class UserRegisterView(CreateView):
+    """ Регистрация пользователя."""
+    model = User
+    form_class = UserRegisterForm
+    success_url = reverse_lazy('users:login_user')
+    template_name = 'user/register_user.html'
 
 def user_login_view(request):
     # Выводим форму логина
@@ -32,11 +29,13 @@ def user_login_view(request):
         form = UserLoginForm(request.POST)  # Создаем экземпляр формы
         if form.is_valid():  # Если форма валидна
             cd = form.cleaned_data  # Очищаем данные
-            user = authenticate(email=cd['email'], password=cd['password'])  # Аутентифицируем пользователя
+            # Аутентифицируем пользователя
+            user = authenticate(email=cd['email'], password=cd['password'])
             if user is not None:  # Если пользователь существует
                 if user.is_active:  # Если пользователь активен
                     login(request, user)  # Авторизуем пользователя
-                    return HttpResponseRedirect(reverse('dogs:index'))  # Переход на главную страницу питомника
+                    # Переход на главную страницу питомника
+                    return HttpResponseRedirect(reverse('dogs:index'))
                 else:
                     return HttpResponse('Аккаунт не активен')
 
@@ -69,7 +68,8 @@ def user_update_view(request):
     # изменение профиля пользователя
     user_object = request.user
     if request.method == 'POST':
-        form = UserUpdateForm(request.POST, request.FILES, instance=user_object)
+        form = UserUpdateForm(request.POST, request.FILES,
+                              instance=user_object)
         if form.is_valid():
             user_object = form.save()
             user_object.save()
@@ -95,7 +95,8 @@ def user_change_password_view(request):
             messages.success(request, "Пароль был успешно изменен")
             return HttpResponseRedirect(reverse('users:profile_user'))
         else:
-            messages.error(request, "Пароль не был изменен. Проверьте введенные данные.")
+            messages.error(
+                request, "Пароль не был изменен. Проверьте введенные данные.")
     context = {'form': form}
     return render(request, 'user/change_password_user.html', context)
 
@@ -103,7 +104,8 @@ def user_change_password_view(request):
 @login_required
 def user_generate_new_password(request):
     # генерация нового пароля и отправка его на почту
-    new_password = ''.join(random.sample((string.ascii_letters + string.digits), 12))
+    new_password = ''.join(random.sample(
+        (string.ascii_letters + string.digits), 12))
     request.user.set_password(new_password)
     request.user.save()
     send_new_password(request.user.email, new_password)

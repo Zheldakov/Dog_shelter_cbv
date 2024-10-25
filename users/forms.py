@@ -2,7 +2,7 @@ from django import forms
 
 from users.models import User
 from users.validators import validate_password
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm
 
 
 class StyleFromMixin:
@@ -20,11 +20,9 @@ class UserForm(StyleFromMixin, forms.ModelForm):
         fields = ('first_name', 'last_name', 'email', 'phone',)
 
 
-class UserRegisterForm(StyleFromMixin, forms.ModelForm):
+class UserRegisterForm(StyleFromMixin, UserCreationForm):
     """ Форма для регистрации нового пользователя."""
-    # password = forms.CharField(label='Пароль', widget=forms.PasswordInput, min_length=8, max_length=12) # c спроверкой поля
-    password = forms.CharField(label='Пароль', widget=forms.PasswordInput) # тут свой валидатор
-    password2 = forms.CharField(label='Повторите пароль', widget=forms.PasswordInput)
+   
 
     class Meta:
         # Поля модели User
@@ -34,11 +32,9 @@ class UserRegisterForm(StyleFromMixin, forms.ModelForm):
     def clean_password2(self):
         # Проверка соответствия паролей
         cd = self.cleaned_data
-        print(cd)
-        validate_password(cd['password'])
-        if cd['password'] != cd['password2']:
-            print('Пароли не совпадают')
-            raise forms.ValidationError('Пароли не совпадают')
+        validate_password(cd['password1'])
+        if cd['password1'] != cd['password2']:
+            raise forms.ValidationError('Passwords do not match')
         return cd['password2']
 
 
