@@ -5,7 +5,7 @@ from django.db.models.base import Model as Model
 from django.db.models.query import QuerySet
 from django.shortcuts import reverse, render, redirect
 
-from django.contrib.auth.views import LoginView, PasswordChangeDoneView, LogoutView
+from django.contrib.auth.views import LoginView, PasswordChangeDoneView, LogoutView, PasswordChangeView
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, UpdateView
 from django.contrib import messages
@@ -59,22 +59,11 @@ class UserUpdateView(UpdateView):
         return self.request.user
 
 
-@login_required
-def user_change_password_view(request):
-    # изменение пароля пользователя
-    user_object = request.user
-    form = UserPasswordChangeForm(user_object, request.POST)
-    if request.method == 'POST':
-        if form.is_valid():
-            user_object = form.save()
-            update_session_auth_hash(request, user_object)
-            messages.success(request, "Пароль был успешно изменен")
-            return HttpResponseRedirect(reverse('users:profile_user'))
-        else:
-            messages.error(
-                request, "Пароль не был изменен. Проверьте введенные данные.")
-    context = {'form': form}
-    return render(request, 'user/change_password_user.html', context)
+class UserPasswordChangeView(PasswordChangeView):
+    """ Изменение пароля пользователя."""
+    form_class = UserPasswordChangeForm
+    template_name = 'user/change_password_user.html'
+    success_url = reverse_lazy('users:profile_user')
 
 
 @login_required
