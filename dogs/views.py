@@ -60,27 +60,13 @@ class DogDetailView(DeleteView):
     template_name = 'dogs/detail.html'
 
 
-@login_required
-def dog_update_view(request, pk):
-    """ Страница редактирования питомца."""
-    # dog_object = Dog.objects.get(pk=pk)  # Получаем питомца из базы по(тоже что и ниже)
-    # Получаем питомца из базы по pk
-    dog_object = get_object_or_404(Dog, pk=pk)
-    if request.method == 'POST':
-        form = DogForm(request.POST, request.FILES,
-                       instance=dog_object)  # Валидация формы
-        if form.is_valid():  # Если форма валидна, сохраняем данные
-            dog_object = form.save()  # Сохраняем питомца в базе
-            dog_object.save()  # Сохраняем питомца в базе
-            return HttpResponseRedirect(reverse('dogs:detail_dog', args={pk: pk}))
-    context = {
-        'object': dog_object,
-        'form': DogForm(instance=dog_object),
-        # Заголовок страницы редактирования
-        'title': f'Редактирование информации о собаке {dog_object.name}'
-    }
-    # Отображаем форму создания питомца
-    return render(request, 'dogs/update.html', context)
+class DogUpdateView(UpdateView):
+    model = Dog
+    form_class = DogForm
+    template_name = 'dogs/update.html'
+
+    def get_success_url(self):
+        return reverse('dogs:detail_dog', args=[self.object.pk])  # Переходим на страницу детальной информации питомца после редактирования
 
 
 def dog_delete_view(request, pk):
