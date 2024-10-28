@@ -4,14 +4,16 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from dogs.models import Category, Dog
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, CreateView,  DetailView, UpdateView, DeleteView
 from dogs.forms import DogForm
 
 
 def index(request):
     """ Показывает главную страницу с информацией о категориях и питомниках."""
     context = {
-        'object_list': Category.objects.all()[:3],  # отображение категорий ограничено тремя
+        # отображение категорий ограничено тремя
+        'object_list': Category.objects.all()[:3],
         'title': "Питомник - Главная"
     }
     return render(request, 'dogs/index.html', context)
@@ -36,38 +38,28 @@ def category_dogs(request, pk):
     }
     return render(request, 'dogs/dogs.html', context)
 
-
-def dogs_list_view(request):
-    """ Показывает страницу со списком всех питомцев."""
-    context = {
-        'object_list': Dog.objects.all(),
-        'title': "Питомник - Все наши собаки"
+class DogListView(ListView):
+    """ Показывает список всех питомцев."""
+    model = Dog
+    extra_context ={
+        'title': "Питомник - Все наши собаки",
     }
-    # return render(request, 'dogs\dogs_list_view.html', context)  # пока как я понимаю нет
-    return render(request, 'dogs/dogs.html', context)  # тестовый вариант
+    template_name = 'dogs/dogs.html'
 
 
-@login_required
-def dog_create_view(request):
+class DogCreateView(CreateView):
     """ Страница создания нового питомца."""
-    if request.method == 'POST':
-        form = DogForm(request.POST, request.FILES)  # Валидация формы
-        if form.is_valid():  # Если форма валидна, сохраняем данные
-            dog_object = form.save()  # Сохраняем питомца в базе
-            dog_object.owner = request.user  # добавляем хозяина собаки
-            dog_object.save()  # сохраняем
-            return HttpResponseRedirect(reverse('dogs:list_dogs'))  # Переходим на страницу детальной информации питомца
-    context = {
-        'title': "Добавляем питомца",
-        'form': DogForm(),
-    }
-    return render(request, 'dogs/create.html', context)  # Отображаем форму создания питомца
+    model = Dog
+    form_class = DogForm
+    template_name = 'dogs/create.html'
+    success_url = reverse_lazy('dogs:list_dogs')
 
 
 @login_required
 def dog_detail_view(request, pk):
     """ Показывает страницу детальной информации о питомце."""
-    dog_item = get_object_or_404(Dog, pk=pk)  # Получаем питомца из базы по pk /самодеятельность
+    dog_item = get_object_or_404(
+        Dog, pk=pk)  # Получаем питомца из базы по pk /самодеятельность
     context = {
         'object': Dog.objects.get(pk=pk),  # Получаем питомца из базы по pk,
         'title': f'Детальная информация о собаке {dog_item.name}'
@@ -79,25 +71,31 @@ def dog_detail_view(request, pk):
 def dog_update_view(request, pk):
     """ Страница редактирования питомца."""
     # dog_object = Dog.objects.get(pk=pk)  # Получаем питомца из базы по(тоже что и ниже)
-    dog_object = get_object_or_404(Dog, pk=pk)  # Получаем питомца из базы по pk
+    # Получаем питомца из базы по pk
+    dog_object = get_object_or_404(Dog, pk=pk)
     if request.method == 'POST':
-        form = DogForm(request.POST, request.FILES, instance=dog_object)  # Валидация формы
+        form = DogForm(request.POST, request.FILES,
+                       instance=dog_object)  # Валидация формы
         if form.is_valid():  # Если форма валидна, сохраняем данные
             dog_object = form.save()  # Сохраняем питомца в базе
             dog_object.save()  # Сохраняем питомца в базе
             return HttpResponseRedirect(reverse('dogs:detail_dog', args={pk: pk}))
     context = {
-            'object': dog_object,
-            'form': DogForm(instance=dog_object),
-            'title': f'Редактирование информации о собаке {dog_object.name}'  # Заголовок страницы редактирования
-        }
-    return render(request, 'dogs/update.html', context)  # Отображаем форму создания питомца
+        'object': dog_object,
+        'form': DogForm(instance=dog_object),
+        # Заголовок страницы редактирования
+        'title': f'Редактирование информации о собаке {dog_object.name}'
+    }
+    # Отображаем форму создания питомца
+    return render(request, 'dogs/update.html', context)
 
 
 def dog_delete_view(request, pk):
-    dog_object = get_object_or_404(Dog, pk=pk)  # Получаем питомца из базы по pk
+    # Получаем питомца из базы по pk
+    dog_object = get_object_or_404(Dog, pk=pk)
     if request.method == 'POST':  # Если запрос POST
         dog_object.delete()  # Удаляем питомца из базы
-        return HttpResponseRedirect(reverse('dogs:list_dogs'))  # Переходим на страницу со списком питомцев
+        # Переходим на страницу со списком питомцев
+        return HttpResponseRedirect(reverse('dogs:list_dogs'))
     return render(request, 'dogs/delete.html', {
         'object': dog_object}, )  # Отображаем страницу подтверждения удаления
