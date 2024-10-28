@@ -63,7 +63,8 @@ class DogUpdateView(UpdateView):
     template_name = 'dogs/update.html'
 
     def get_success_url(self):
-        return reverse('dogs:detail_dog', args=[self.object.pk])  # Переходим на страницу детальной информации питомца после редактирования
+        # return reverse('dogs:detail_dog', args=[self.object.pk])  # Переходим на страницу детальной информации питомца после редактирования
+        return reverse('dogs:detail_dog', args=[self.kwargs.get('pk')])  # Переходим на страницу детальной информации питомца после редактирования
 
 
 class DogDeleteView(DeleteView):
