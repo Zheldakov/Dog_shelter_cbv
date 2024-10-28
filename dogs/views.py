@@ -69,12 +69,8 @@ class DogUpdateView(UpdateView):
         return reverse('dogs:detail_dog', args=[self.object.pk])  # Переходим на страницу детальной информации питомца после редактирования
 
 
-def dog_delete_view(request, pk):
-    # Получаем питомца из базы по pk
-    dog_object = get_object_or_404(Dog, pk=pk)
-    if request.method == 'POST':  # Если запрос POST
-        dog_object.delete()  # Удаляем питомца из базы
-        # Переходим на страницу со списком питомцев
-        return HttpResponseRedirect(reverse('dogs:list_dogs'))
-    return render(request, 'dogs/delete.html', {
-        'object': dog_object}, )  # Отображаем страницу подтверждения удаления
+class DogDeleteView(DeleteView):
+    """ Страница удаления питомца."""
+    model = Dog
+    template_name = 'dogs/delete.html'
+    success_url = reverse_lazy('dogs:list_dogs')  # Переходим на страницу со списком питомцев после удаления
