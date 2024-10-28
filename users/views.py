@@ -2,16 +2,11 @@ import random
 import string
 
 from django.db.models.base import Model as Model
-from django.db.models.query import QuerySet
-from django.shortcuts import reverse, render, redirect
-
-from django.contrib.auth.views import LoginView, PasswordChangeDoneView, LogoutView, PasswordChangeView
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView, UpdateView
-from django.contrib import messages
-from django.http import HttpResponseRedirect, HttpResponse
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.shortcuts import reverse, redirect
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
+from django.views.generic import CreateView,  UpdateView
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
 
 from users.models import User
 from users.forms import UserRegisterForm, UserLoginForm, UserUpdateForm, UserPasswordChangeForm, UserForm
