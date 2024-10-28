@@ -54,17 +54,10 @@ class DogCreateView(CreateView):
     template_name = 'dogs/create.html'
     success_url = reverse_lazy('dogs:list_dogs')
 
-
-@login_required
-def dog_detail_view(request, pk):
-    """ Показывает страницу детальной информации о питомце."""
-    dog_item = get_object_or_404(
-        Dog, pk=pk)  # Получаем питомца из базы по pk /самодеятельность
-    context = {
-        'object': Dog.objects.get(pk=pk),  # Получаем питомца из базы по pk,
-        'title': f'Детальная информация о собаке {dog_item.name}'
-    }
-    return render(request, 'dogs/detail.html', context)
+class DogDetailView(DeleteView):
+    """ Страница детальной информации о питомца."""
+    model = Dog
+    template_name = 'dogs/detail.html'
 
 
 @login_required
