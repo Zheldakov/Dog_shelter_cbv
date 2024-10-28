@@ -1,11 +1,8 @@
-from lib2to3.fixes.fix_input import context
-
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
-from dogs.models import Category, Dog
+from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView,  DetailView, UpdateView, DeleteView
+
+from dogs.models import Category, Dog
 from dogs.forms import DogForm
 
 
@@ -54,7 +51,7 @@ class DogCreateView(CreateView):
     template_name = 'dogs/create.html'
     success_url = reverse_lazy('dogs:list_dogs')
 
-class DogDetailView(DeleteView):
+class DogDetailView(DetailView):
     """ Страница детальной информации о питомца."""
     model = Dog
     template_name = 'dogs/detail.html'
