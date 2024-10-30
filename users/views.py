@@ -20,6 +20,11 @@ class UserRegisterView(CreateView):
     success_url = reverse_lazy('users:login_user')
     template_name = 'user/register_user.html'
 
+    def form_valid(self, form):
+        # переписываем form_valid для отправки письма при регестрации
+        self.object = form.save() # получаем объект из формы
+        send_register_email(self.object.mail) # отправляем письмо  на почту объекта
+        return super().form_valid(form)
 
 class UserLoginView(LoginView):
     """ Логин пользователя."""
