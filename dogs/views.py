@@ -58,6 +58,7 @@ class DogDetailView(DetailView):
 
 
 class DogUpdateView(UpdateView):
+    """ Страница изменения информации о питомце."""
     model = Dog
     form_class = DogForm
     template_name = 'dogs/update.html'
