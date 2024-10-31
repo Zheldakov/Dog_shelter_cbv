@@ -198,6 +198,17 @@ LOGIN_REDIRECT_URL = 'dogs:index' #'/'
 # Путь, куда попадают не авторизованные пользователи, при использовании функций для авторизованных пользователей
 LOGIN_URL = '/users/'
 
+# Размещение и активация КЕШа
+CASHE_ENABLED = os.getenv('CASHE_ENABLED') == 'True'
+CASHE_LOCATION= os.getenv('CASHE_LOCATION')
+if CASHE_ENABLED:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+            'LOCATION': CASHE_LOCATION,
+        }
+    }
+    
 # добавлено подключение к почте
 # в примере почта Яндекс
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
