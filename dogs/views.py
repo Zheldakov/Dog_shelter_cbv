@@ -1,3 +1,4 @@
+from django.db.models.query import QuerySet
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView,  DetailView, UpdateView, DeleteView
@@ -31,16 +32,19 @@ def categories(request):
     return render(request, 'dogs/categories.html', context)
 
 
-@login_required
-def category_dogs(request, pk):
+class DogCategoryListView(ListView):
     """ Показывает страницу с информацией о питомцах определенной категории."""
-    category_item = Category.objects.get(pk=pk)
-    context = {
-        'object_list': Dog.objects.filter(category_id=pk),
-        'title': f'Собаки породы {category_item.name}',
-        'category_pk': category_item.pk,
-    }
-    return render(request, 'dogs/dogs.html', context)
+    model = Dog
+    template_name = 'dogs/dogs.html'
+    def get_queryset(self):
+        queryset = super().get_queryset().filter(
+            category_id=self.kwargs.get('pk')
+        )
+        # Опция которая позволяет закрыть страницу от пользователя (будет видить только своих собак)
+        # if not self.request.user.is_staff:
+        #     queryset = queryset.filter(owner=self.request.user)
+
+        return queryset
 
 
 class DogListView(ListView):
