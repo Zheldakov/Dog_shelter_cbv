@@ -66,7 +66,7 @@ class DogCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         # Добавляем текущего пользователя в поле "владелец" нового питомца
         # form.instance.owner = self.request.user
-        self.object = form.save  # получаем объект из формы
+        self.object = form.save()  # получаем объект из формы
         # добавляем владельца собаки из зарегистрированого пользователя
         self.object.owner = self.request.user
         self.object.save()
