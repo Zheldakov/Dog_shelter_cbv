@@ -39,7 +39,7 @@ class Parent(models.Model):
     dog = models.ForeignKey(Dog, on_delete=models.CASCADE)
     name = models.CharField(max_length=250, verbose_name='dog_name')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="breed")
-    birdh_date = models.DateField(**NULLABLE, verbose_name='birdh_date')
+    birth_date = models.DateField(**NULLABLE, verbose_name='birth_date')
 
     def __str__(self) -> str:
         return f'{self.name} ({self.category})'
