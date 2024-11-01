@@ -29,8 +29,8 @@
       <div class="card">
         <div class="card-header">Родословная</div>
         <div class="card-body">
-            {{ formset.manafment_form }}
-            {% for from in formset.forms %}
+            {{ formset.management_form }}
+            {% for form in formset.forms %}
                 {{ form.as_p }}
                 {% if not forloop.last %}
                     <hr>
