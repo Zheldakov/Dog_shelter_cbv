@@ -102,7 +102,7 @@ class DogUpdateView(LoginRequiredMixin, UpdateView):
         contex_data = super().get_context_data(**kwargs)
         ParentFormset = inlineformset_factory(Dog, Parent, form=ParentForm, extra=1)
         if self.request.method == 'POST':
-            formset = ParentFormset(self.request.POST, isinstance=self.object)
+            formset = ParentFormset(self.request.POST, instance=self.object)
         else:
             formset = ParentFormset(instance=self.object)
         contex_data['formset'] = formset
