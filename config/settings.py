@@ -199,16 +199,15 @@ LOGIN_REDIRECT_URL = 'dogs:index' #'/'
 LOGIN_URL = '/users/'
 
 # Размещение и активация КЕШа
-CASHE_ENABLED = os.getenv('CASHE_ENABLED') == 'True'
-CASHE_LOCATION= os.getenv('CASHE_LOCATION')
-if CASHE_ENABLED:
+CACHE_ENABLED = os.getenv('CACHE_ENABLED') == 'True'
+if CACHE_ENABLED:
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-            'LOCATION': CASHE_LOCATION,
+            'LOCATION': os.getenv('CACHE_LOCATION'),
         }
     }
-    
+
 # добавлено подключение к почте
 # в примере почта Яндекс
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
