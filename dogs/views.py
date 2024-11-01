@@ -100,8 +100,7 @@ class DogUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         # Добавляем форму для редактирования родителей питомца
         contex_data = super().get_context_data(**kwargs)
-        ParentFormset = inlineformset_factory(
-            Dog, Parent, form=ParentForm, extra=1)
+        ParentFormset = inlineformset_factory(Dog, Parent, form=ParentForm, extra=1)
         if self.request.method == 'POST':
             formset = ParentFormset(self.request.POST, isinstance=self.object)
         else:
@@ -111,8 +110,8 @@ class DogUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         # форма валидации для подставления родословной
-        context_date = self.get_context_data
-        formset = context_date['formset']
+        contex_data = self.get_context_data()
+        formset = contex_data['formset']
         self.object = form.save()
         if formset.is_valid():
             formset.instance = self.object
