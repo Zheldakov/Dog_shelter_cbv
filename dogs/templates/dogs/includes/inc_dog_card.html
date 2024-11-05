@@ -13,9 +13,9 @@
       <a class="btn btn-lg byn-block btn-outline-info" href="{% url 'dogs:detail_dog' object.pk %}">Информация</a>
       {% if user.authentication  object.owner == user or user.is_staff %}
         <a class="btn btn-lg byn-block btn-outline-warning" href="{% url 'dogs:update_dog' object.pk %}">
-        {% if users.is_staff %}
+        {% if users.is_superuser %}
             Изменить/Удалить
-        {% elif object.owner == user%}
+        {% elif object.owner == user or user.is_staff%}
             Изменить
         {% endif %}
        </a>

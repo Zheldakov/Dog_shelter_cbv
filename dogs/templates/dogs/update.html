@@ -26,6 +26,12 @@
         {% endif %}
          </a>
         </div>
+        <div class="card-footer">
+          <a href="{% url 'dogs:list_dogs' %}" class="btn btn-outline-primary"><< Назад</a>
+           {% if object and user.is_superuser %}
+            <a href="{% url 'dogs:delete_dog' object.pk %}" class="btn btn-outline-danger float-right">Удалить</a>
+        {% endif %}
+        </div>
       </div>
     </div>
     <div class="col-6">
