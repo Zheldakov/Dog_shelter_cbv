@@ -1,5 +1,5 @@
 from django.db.models.query import QuerySet
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView,  DetailView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required
@@ -146,3 +146,13 @@ class DogDeleteView(DeleteView):
     template_name = 'dogs/delete.html'
     # Переходим на страницу со списком питомцев после удаления
     success_url = reverse_lazy('dogs:list_dogs')
+    
+def dog_toggle_activity(request, pk):
+    dog_item = get_object_or_404(Dog, pk=pk)
+    if dog_item.is_active:
+        dog_item.is_active = False
+    else:
+        dog_item.is_active = True
+    dog_item.save()
+    
+    return redirect(reverse('dogs:list_dogs'))
