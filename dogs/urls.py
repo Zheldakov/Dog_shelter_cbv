@@ -1,7 +1,7 @@
 from django.urls import path
 from django.views.decorators.cache import cache_page,never_cache
 
-from dogs.views import index, DogListView, DogCreateView, DogDetailView, DogUpdateView, DogDeleteView, DogCategoryListView, CategoryListView, DogDeactiveListView
+from dogs.views import index, DogListView, DogCreateView, DogDetailView, DogUpdateView, DogDeleteView, DogCategoryListView, CategoryListView, DogDeactiveListView, dog_toggle_activity
 from dogs.apps import DogsConfig
 
 app_name = DogsConfig.name  # DogsConfig имя приложения
@@ -19,5 +19,6 @@ urlpatterns = [
     path('dogs/detail/<int:pk>/',DogDetailView.as_view(), name='detail_dog'),
     # path('dogs/update/<int:pk>/', DogUpdateView.as_view(), name='update_dog'),
     path('dogs/update/<int:pk>/', never_cache(DogUpdateView.as_view()), name='update_dog'), # /не кешируется страница
+    path('dogs/toggle/<int:pk>/', dog_toggle_activity, name='toggle_activity_dog'),
     path('dogs/delete/<int:pk>/',DogDeleteView.as_view(), name='delete_dog')
 ]
