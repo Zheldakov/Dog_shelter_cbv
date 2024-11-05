@@ -8,8 +8,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 from django.forms import inlineformset_factory
 
+from users.models import UserRoles
+
 from dogs.models import Category, Dog, Parent
 from dogs.forms import DogForm, ParentForm
+
 
 
 def index(request):
@@ -28,7 +31,27 @@ class CategoryListView(LoginRequiredMixin, ListView):
         'title': 'Питомник - Все наши породы'
     }
     template_name = 'dogs/categories.html'
+
+    def gey_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(is_active=True)
+        return queryset
     
+class DogDeactiveListView(LoginRequiredMixin, ListView):
+    model = Dog
+    extra_conrext = {
+        'title': 'Питомник - неактивные собаки'
+    }
+    template_name = 'dogs/dogs.html'
+
+    def gey_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.role in [UserRoles.MODERATORU, UserRoles.ADMIN]:
+            queryset = queryset.filter(is_active=False)
+        if self.request.user.role == UserRoles.USER:
+            queryset = queryset.filter(is_active=False, owner=self.request.user)
+        return queryset
+        
 
 class DogCategoryListView(ListView):
     """ Показывает страницу с информацией о питомцах определенной категории."""
