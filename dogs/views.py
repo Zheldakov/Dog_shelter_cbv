@@ -22,15 +22,13 @@ def index(request):
     return render(request, 'dogs/index.html', context)
 
 
-@login_required
-def categories(request):
-    """ Показывает страницу с информацией о всех категориях питомника."""
-    context = {
-        'object_list': Category.objects.all(),
-        'title': "Питомник - Все наши породы"
+class CategoryListView(LoginRequiredMixin, ListView):
+    model = Category
+    extra_conrext = {
+        'title': 'Питомник - Все наши породы'
     }
-    return render(request, 'dogs/categories.html', context)
-
+    template_name = 'dogs/categories.html'
+    
 
 class DogCategoryListView(ListView):
     """ Показывает страницу с информацией о питомцах определенной категории."""
