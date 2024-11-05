@@ -26,6 +26,9 @@
                 <div class="col-sm-4 offset-md-1 py-4">
                     <h4 class="text-white">Меню</h4>
                     <ul class="list-unstyled">
+                        {% if user is_superuser%}
+                            <li><a class="p-2 btn btn-success" href="/admin/">Админка</a></li>
+                        {% endif %}
                         <li><a href="{% url 'dogs:index' %}" class="text-white">Главная</a></li>
                         <li><a href="{% url 'dogs:categories' %}" class="text-white">Породы</a></li>
                         <li><a href="{% url 'dogs:list_dogs' %}" class="text-white">Собаки</a></li>
