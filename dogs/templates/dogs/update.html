@@ -16,7 +16,8 @@
           {% csrf_token %}
           {{ form.as_p }}
           <input type="submit" class="btn btn-outline-success" 
-          value="{% if object %}Сохранить{% else %} Добавить{% enfif %}">
+          {% if object %}
+          value="{% if object %}Сохранить{% else %} Добавить{% endif %}">
           <a href="{% url 'dogs:toggle_activity_dog' object.pk %}" 
           class="btn btn-outline-warning float-right">
         {% if object.is_active%}
@@ -25,6 +26,7 @@
         Активировать
         {% endif %}
          </a>
+         {% endif %}
         </div>
         <div class="card-footer">
           <a href="{% url 'dogs:list_dogs' %}" class="btn btn-outline-primary"><< Назад</a>
