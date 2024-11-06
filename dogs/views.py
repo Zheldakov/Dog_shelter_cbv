@@ -1,10 +1,10 @@
-from django.db.models.query import QuerySet
+
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, CreateView,  DetailView, UpdateView, DeleteView
-# миксин который выполняет классы только тогда когда пользователь зарегестрированный
+# миксин который выполняет классы только тогда когда пользователь зарегистрированный
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.http import Http404, HttpResponseForbidden
+# from django.http import Http404, HttpResponseForbidden
 from django.forms import inlineformset_factory
 from django.core.exceptions import PermissionDenied
 
