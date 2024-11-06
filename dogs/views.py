@@ -32,21 +32,21 @@ class CategoryListView(LoginRequiredMixin, ListView):
     }
     template_name = 'dogs/categories.html'
 
-    def gey_queryset(self):
+    def get_queryset(self):
         queryset = super().get_queryset()
         queryset = queryset.filter(is_active=True)
         return queryset
     
 class DogDeactiveListView(LoginRequiredMixin, ListView):
     model = Dog
-    extra_conrext = {
+    extra_context = {
         'title': 'Питомник - неактивные собаки'
     }
     template_name = 'dogs/dogs.html'
 
-    def gey_queryset(self):
+    def get_queryset(self):
         queryset = super().get_queryset()
-        if self.request.user.role in [UserRoles.MODERATORU, UserRoles.ADMIN]:
+        if self.request.user.role in [UserRoles.MODERATOR, UserRoles.ADMIN]:
             queryset = queryset.filter(is_active=False)
         if self.request.user.role == UserRoles.USER:
             queryset = queryset.filter(is_active=False, owner=self.request.user)

@@ -23,7 +23,7 @@ class UserRegisterView(CreateView):
     def form_valid(self, form):
         # переписываем form_valid для отправки письма при регестрации
         self.object = form.save() # получаем объект из формы
-        send_register_email(self.object.mail) # отправляем письмо  на почту объекта
+        send_register_email(self.object.email) # отправляем письмо  на почту объекта
         return super().form_valid(form)
 
 class UserLoginView(LoginView):

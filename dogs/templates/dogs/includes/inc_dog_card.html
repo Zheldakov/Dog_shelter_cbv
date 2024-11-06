@@ -4,14 +4,14 @@
     <div class="card-header">
       <h4 class="my-0 font-whight-normal">{{ object.name }}</h4>
     </div>
-    <img class="card-img-top" src="{{ object.photo|dogs_media }}" width="300" height="320" alt="Card image cap" />
+    <img class="card-img-top" src="{{ object.photo|mymedia }}" width="300" height="320" alt="Card image cap" />
     <div class="card-body">
       <h5 class="card-title pricing-card-title">Порода: {{ object.category }}</h5>
       <ul class="list-unstyled mt-3 mb-4 text-start m-3">
         <li>Дата рождения: {{ object.birth_date|default:'не известна' }}</li>
       </ul>
       <a class="btn btn-lg byn-block btn-outline-info" href="{% url 'dogs:detail_dog' object.pk %}">Информация</a>
-      {% if user.authentication  object.owner == user or user.is_staff %}
+      {% if user.authentication  and object.owner == user or user.is_staff %}
         <a class="btn btn-lg byn-block btn-outline-warning" href="{% url 'dogs:update_dog' object.pk %}">
         {% if users.is_superuser %}
             Изменить/Удалить
