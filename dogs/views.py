@@ -92,7 +92,7 @@ class DogCreateView(LoginRequiredMixin, CreateView):
             # return HttpResponseForbidden("У вас нет прав для добавление собак") # только если ожидается перенаправление
         # form.instance.owner = self.request.user
         self.object = form.save()  # получаем объект из формы
-        # добавляем владельца собаки из зарегистрированого пользователя
+        # добавляем владельца собаки из зарегистрированного пользователя
         self.object.owner = self.request.user
         self.object.save()
         return super().form_valid(form)
