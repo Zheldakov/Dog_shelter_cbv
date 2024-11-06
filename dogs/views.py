@@ -27,16 +27,11 @@ def index(request):
 
 class CategoryListView(LoginRequiredMixin, ListView):
     model = Category
-    extra_conrext = {
+    extra_context = {
         'title': 'Питомник - Все наши породы'
     }
     template_name = 'dogs/categories.html'
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        queryset = queryset.filter(is_active=True)
-        return queryset
-    
 class DogDeactiveListView(LoginRequiredMixin, ListView):
     model = Dog
     extra_context = {
@@ -45,13 +40,14 @@ class DogDeactiveListView(LoginRequiredMixin, ListView):
     template_name = 'dogs/dogs.html'
 
     def get_queryset(self):
+        # Показывает для тех учеток неактивных собак, и для пользователей своих неактивных собак
         queryset = super().get_queryset()
         if self.request.user.role in [UserRoles.MODERATOR, UserRoles.ADMIN]:
             queryset = queryset.filter(is_active=False)
         if self.request.user.role == UserRoles.USER:
             queryset = queryset.filter(is_active=False, owner=self.request.user)
         return queryset
-        
+
 
 class DogCategoryListView(ListView):
     """ Показывает страницу с информацией о питомцах определенной категории."""
@@ -75,6 +71,11 @@ class DogListView(ListView):
         'title': "Питомник - Все наши собаки",
     }
     template_name = 'dogs/dogs.html'
+    def get_queryset(self):
+        # Фильтр показывает только активных собак
+        queryset = super().get_queryset()
+        queryset = queryset.filter(is_active=True)
+        return queryset
 
 
 class DogCreateView(LoginRequiredMixin, CreateView):
@@ -120,7 +121,7 @@ class DogUpdateView(LoginRequiredMixin, UpdateView):
         # if self.object.owner != self.request.user and not self.request.user.is_staff:
         if self.object.owner != self.request.user and self.request.user.role != UserRoles.ADMIN:
             # raise Http404
-            raise PermissionDenied() 
+            raise PermissionDenied()
         return self.object
 
     def get_context_data(self, **kwargs):
@@ -157,7 +158,7 @@ class DogDeleteView(PermissionRequiredMixin, DeleteView):
     # dogs.change_dog - PermissionRequiredMixin + UpdateViwe
     # dogs.view_dog - PermissionRequiredMixin + DetailViwe
     # ------------------------------------------------------
-    
+
 def dog_toggle_activity(request, pk):
     dog_item = get_object_or_404(Dog, pk=pk)
     if dog_item.is_active:
@@ -165,5 +166,5 @@ def dog_toggle_activity(request, pk):
     else:
         dog_item.is_active = True
     dog_item.save()
-    
+
     return redirect(reverse('dogs:list_dogs'))
