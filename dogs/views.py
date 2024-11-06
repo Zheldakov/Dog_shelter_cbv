@@ -5,7 +5,7 @@ from django.views.generic import ListView, CreateView,  DetailView, UpdateView, 
 from django.contrib.auth.decorators import login_required
 # миксин который выполняет классы только тогда когда пользователь зарегестрированный
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import Http404
+from django.http import Http404, HttpResponseForbidden
 from django.forms import inlineformset_factory
 
 from users.models import UserRoles
@@ -86,6 +86,8 @@ class DogCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         # Добавляем текущего пользователя в поле "владелец" нового питомца
+        if self.request.user.role != UserRoles.USER: # ограничивает служебные учетки
+            return HttpResponseForbidden("У вас нет прав для добавление собак")
         # form.instance.owner = self.request.user
         self.object = form.save()  # получаем объект из формы
         # добавляем владельца собаки из зарегистрированого пользователя
