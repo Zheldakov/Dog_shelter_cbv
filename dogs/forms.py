@@ -10,7 +10,7 @@ class DogForm(StyleFromMixin, forms.ModelForm):
     # Создаем форму для добавления/редактирования питомца с указанными полями
     class Meta:
         model = Dog
-        exclude = ('owner',)
+        exclude = ('owner','is_active','views')
 
     def clean_birth_date(self):
         cleaned_data = self.cleaned_data['birth_date']
