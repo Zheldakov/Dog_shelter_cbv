@@ -10,7 +10,7 @@ class DogForm(StyleFromMixin, forms.ModelForm):
     # Создаем форму для добавления/редактирования питомца с указанными полями
     class Meta:
         model = Dog
-        exclude = ('owner','is_active','views')
+        exclude = ('owner', 'is_active', 'views')
 
     def clean_birth_date(self):
         cleaned_data = self.cleaned_data['birth_date']
@@ -21,6 +21,16 @@ class DogForm(StyleFromMixin, forms.ModelForm):
             raise forms.ValidationError(
                 'Возраст питомца не может быть больше 100 лет')
         return cleaned_data
+
+
+class DogAdminForm(StyleFromMixin, forms.ModelForm):
+    class Meta:
+        model = Dog
+        exclude = '__all__'
+
+    @staticmethod
+    def clean_birth_date():
+        DogForm.clean_birth_date()
 
 
 class ParentForm(StyleFromMixin, forms.ModelForm):
