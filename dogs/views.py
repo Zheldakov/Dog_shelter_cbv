@@ -13,8 +13,7 @@ from dogs.services import send_views_mail
 from users.models import UserRoles
 
 from dogs.models import Category, Dog, Parent
-from dogs.forms import DogForm, ParentForm
-
+from dogs.forms import DogForm, ParentForm, DogAdminForm
 
 
 def index(request):
@@ -123,7 +122,6 @@ class DogDetailView(LoginRequiredMixin, DetailView):
 class DogUpdateView(LoginRequiredMixin, UpdateView):
     """ Страница изменения информации о питомце."""
     model = Dog
-    form_class = DogForm
     template_name = 'dogs/update.html'
 
     def get_success_url(self):
@@ -160,6 +158,16 @@ class DogUpdateView(LoginRequiredMixin, UpdateView):
             formset.instance = self.object
             formset.save()
         return super().form_valid(form)
+
+    def get_form_class(self):
+        dog_forms ={
+            'admin':DogAdminForm,
+            'moderator':DogForm,
+            'user': DogForm,
+        }
+        user_role = self.request.user.role
+        dog_form_class =dog_forms[user_role]
+        return dog_form_class
 
 
 class DogDeleteView(PermissionRequiredMixin, DeleteView):
