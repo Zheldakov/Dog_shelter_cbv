@@ -11,8 +11,8 @@ Class-based views
     1. Add an import:  from other_app.views import Home
     2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
 Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+    1. Import the includes() function: from django.urls import includes, path
+    2. Add a URL to urlpatterns:  path('blog/', includes('blog.urls'))
 """
 """
 Настройка URL-адресов для проекта config.
@@ -27,8 +27,8 @@ Including another URLconf
  1. Добавьте импорт: из other_app.views импортируйте Home
  2. Добавьте URL-адрес в urlpatterns: path(", Home.as_view(), name="home")
 Включая другой URLconf
- 1. Импортируйте функцию include(): из django.urls импортируйте include, path
- 2. Добавьте URL-адрес в urlpatterns: path('blog/', include('blog.urls'))
+ 1. Импортируйте функцию includes(): из django.urls импортируйте includes, path
+ 2. Добавьте URL-адрес в urlpatterns: path('blog/', includes('blog.urls'))
 """
 """Отслеживание url-адресов"""
 from django.contrib import admin
