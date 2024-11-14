@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.base import Model as Model
 from django.shortcuts import reverse, redirect
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
-from django.views.generic import CreateView, UpdateView, ListView
+from django.views.generic import CreateView, UpdateView, ListView, DetailView
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 
@@ -81,6 +81,13 @@ class UserListView(LoginRequiredMixin, ListView):
         queryset = super().queryset.filtr(is_active=True)
         return queryset
 
+class UserViewProfileView(DetailView):
+    """ Просмотр профиля пользователя."""
+    model = User
+    template_name = 'user/user_view_profile.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user
 
 @login_required
 def user_generate_new_password(request):

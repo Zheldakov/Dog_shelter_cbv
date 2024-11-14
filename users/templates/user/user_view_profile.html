@@ -1,0 +1,24 @@
+{% extends 'dogs/base.html' %}
+{% load my_tags %}
+{% block content %}
+<div class="row">
+    <div class="col-3">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">Профиль {{ object.first_name }}</div>
+                <img class="card-img-top" src="{{ object.avatar|user_media }}" width="300" height="700"
+                     alt="Card image cap">
+                <div class="card-body"><span class="card-text"> Почта: {{ object.email }}</span></div>
+                <div class="card-body"><span class="card-text"> Имя: {{ object.first_name|default:"Не указано" }}</span></div>
+                <div class="card-body"><span class="card-text"> Фамилия: {{ object.L=last_name|default:"Не указано" }}</span></div>
+                <div class="card-body"><span class="card-text"> Телефон: {{ object.phone|default:"Не указано" }}</span></div>
+                <div class="card-body"><span class="card-text"> Telegram: {{ object.telegram|default:"Не указано" }}</span></div>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'users:users_list' %}" class="btn btn-outline-primary"> << Назад </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

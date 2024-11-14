@@ -13,7 +13,7 @@ user_media
           <li>E-mail: {{object.phone|default:'не указан'}}</li>
           <li>E-mail: {{object.telegram|default:'не указан'}}</li>
       </ul>
-      <a class="btn btn-lg byn-block btn-outline-info" href="{% url 'dogs:detail_dog' object.pk %}">Информация</a>
+      <a class="btn btn-lg byn-block btn-outline-info" href="{% url 'users:profile_user_view' object.pk %}">Информация</a>
 
     </div>
   </div>
