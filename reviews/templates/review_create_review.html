@@ -1,0 +1,41 @@
+{% extends 'dogs/base.html' %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data" class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">
+                {% if object %}
+                Редактирование отзыва
+                {% else %}
+                Новый отзыв
+                {% endif %}
+            </div>
+
+            <div class="card-body">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" class="btn btn-outline-success"
+
+                       value="{% if object %}Сохранить{% else %} Добавить{% endif %}">
+                {% if object %}
+                <a href="{% url 'reviews:toggle_activity_review' object.slug %}"
+                   class="btn btn-outline-warning float-right">
+                    {% if object.sing_of_review %}
+                    Деактивировать
+                    {% else %}
+                    Активировать
+                    {% endif %}
+                </a>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'reviews:list_review' %}" class="btn btn-outline-primary"><< Назад</a>
+                {% if object and user.is_superuser %}
+                <a href="{% url 'reviews:delete_review' object.slug %}" class="btn btn-outline-danger float-right">Удалить</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
