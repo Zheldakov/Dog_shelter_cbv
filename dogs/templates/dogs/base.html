@@ -32,9 +32,9 @@
                         <li><a href="{% url 'dogs:index' %}" class="text-white">Главная</a></li>
                         <li><a href="{% url 'dogs:categories' %}" class="text-white">Породы</a></li>
                         <li><a href="{% url 'dogs:list_dogs' %}" class="text-white">Собаки</a></li>
+                        <li><a href="{% url 'reviews:list_reviews' %}" class="text-white">Наши отзывы</a></li>
                         {% if user.is_authenticated %}
                             <li><a href="{% url 'users:users_list' %}" class="text-white">Все пользователи</a></li>
-                            <li><a href="{% url 'dogs:create_dog' %}" class="text-white">Добавить собаку</a></li>
                             <li><a href="{% url 'users:profile_user' %}" class="text-white">Профиль</a></li>
                             <form method="post" action="{% url 'users:logout_user' %}">
                                 {% csrf_token %}

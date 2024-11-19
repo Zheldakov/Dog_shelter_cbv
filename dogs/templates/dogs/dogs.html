@@ -2,12 +2,15 @@
 {% load my_tags %}
 {% block content %}
 <div class="container">
-<div class="row">
-    {% for object in object_list %}
-    {% include 'dogs/includes/inc_dog_card.html' with object=object %}
-    {% endfor %}
-</div>
-<a href ="{% url 'dogs:list_dogs' %}" class="btn btn-outline-success m-2">Активные собаки</a>
-<a href ="{% url 'dogs:deactivated_list_dogs' %}" class="btn btn-outline-secondary m-2">Не активные собаки</a>
+    <div class="row">
+        {% for object in object_list %}
+        {% include 'dogs/includes/inc_dog_card.html' with object=object %}
+        {% endfor %}
+    </div>
+    <a href="{% url 'dogs:create_dog' %}" class="btn btn-outline-primary m-2 float-left">Добавить собаку</a>
+    <a href="{% url 'dogs:deactivated_list_dogs' %}" class="btn btn-outline-secondary m-2 float-right">Не активные
+        собаки</a>
+    <a href="{% url 'dogs:list_dogs' %}" class="btn btn-outline-success m-2 float-right">Активные собаки</a>
+
 </div>
 {% endblock %}

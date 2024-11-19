@@ -1,0 +1,9 @@
+{% block content %}
+<div class="container">
+    <div class="row">
+        {% for object in object_list %}
+        {% include 'reviews/includes/inc_reviews _card.html' with object=object %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
