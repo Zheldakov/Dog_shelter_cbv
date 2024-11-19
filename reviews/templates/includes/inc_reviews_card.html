@@ -1,0 +1,15 @@
+{% load my_tags %}
+<div class="col-4">
+    <div class="card mb-4 box-shadow">
+        <div class="card-header">
+            <h4 class="my-0 font-whight-normal">Кличка:{{ object.dog.name }} / Порода:{{ object.dog.category }}</h4>
+        </div>
+
+        <div class="card-body">
+            <h5 class="card-title pricing-card-title">Заголовок: {{ object.title|truncatechars:15 }}</h5>
+            <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                <li>Создан: {{ object.created }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
