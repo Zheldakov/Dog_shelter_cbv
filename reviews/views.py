@@ -8,6 +8,7 @@ from django.core.exceptions import PermissionDenied
 from reviews.models import Review
 from users.models import UserRoles
 from reviews.forms import ReviewForm
+from reviews.utils import slug_generation
 
 
 class ReviewListView(LoginRequiredMixin, ListView):
@@ -53,6 +54,19 @@ class ReviewUpdateView(LoginRequiredMixin,DeleteView):
     model = Review
     form_class = ReviewForm
     template_name ='reviews/review_create_update.html'
+
+    def form_valid(self,form):
+        if self.request.user.role not in [UserRoles.USER, UserRoles.ADMIN]:
+            return HttpResponseForbidden()
+        self.object = form.save()
+        print(self.object.slug)
+        if self.object.slug == "temp_slug":
+            self.object.slug = slug_generation()
+            print(self.object.slug)
+        self.object.autor =self.request.user
+        self.object.save()
+        return super().form_valid(form)
+
 
     def get_success_url(self):
         return reverse('reviews:detail_review', args=[self.kwargs.get('slug')])
