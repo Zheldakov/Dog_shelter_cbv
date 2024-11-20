@@ -68,6 +68,7 @@ class DogCategoryListView(ListView):
 class DogListView(ListView):
     """ Показывает список всех питомцев."""
     model = Dog
+    paginate_by = 3
     extra_context = {
         'title': "Питомник - Все наши собаки",
     }
