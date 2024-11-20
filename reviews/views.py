@@ -44,7 +44,7 @@ class DeactivatedDogReviewListView(LoginRequiredMixin, ListView):
 class ReviewCreateView(CreateView):
     model = Review
     form_class = ReviewForm
-    template_name ='reviews/review_create_review.html'
+    template_name ='reviews/review_create_update.html'
 
 class ReviewDetailView(LoginRequiredMixin,DeleteView):
     model = Review
