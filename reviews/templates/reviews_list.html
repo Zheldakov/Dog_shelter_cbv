@@ -5,6 +5,7 @@
         {% include 'reviews/includes/inc_reviews_card.html' with object=object %}
         {% endfor %}
     </div>
+    {% include 'dogs/includes/inc_pagination.html' %}
     <a href="{% url 'reviews:create_review' %}" class="btn btn-outline-primary m-2 float-left">Добавить отзыв</a>
     <a href="{% url 'reviews:deactivated_reviews_list' %}" class="btn btn-outline-secondary m-2 float-right">Неактивные отзывы</a>
     <a href="{% url 'reviews:list_reviews' %}" class="btn btn-outline-success m-2 float-right">Активные отзывы</a>

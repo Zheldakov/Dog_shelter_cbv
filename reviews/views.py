@@ -13,6 +13,7 @@ from reviews.utils import slug_generation
 
 class ReviewListView(LoginRequiredMixin, ListView):
     model = Review
+    paginate_by = 3
     extra_context = {
         'title': 'Питомник - Все отзывы по собаке'
     }
