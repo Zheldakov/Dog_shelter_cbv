@@ -1,0 +1,28 @@
+{% extends 'dogs/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card-md-12 box-shadow">
+            <div class="card-header">
+                <p class="card-text">
+                    <td>Отзыв</td>
+                    {{ object.dog.name }} {{ object.title }}
+                </p>
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    <td>Текст отзыва</td>
+                    {{ object.content }}
+                </p>
+                <span class="text-muted"><td>Дата создания</td>{{ object.created }}</span>
+                <br>
+                <span class="text-muted"><td>Автор:</td>{{ object.author|default:"Аноним" }}</span>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'reviews:list_reviews' %}"><< Назад</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

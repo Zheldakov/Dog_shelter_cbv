@@ -6,10 +6,14 @@
         </div>
 
         <div class="card-body">
-            <h5 class="card-title pricing-card-title">Заголовок: {{ object.title|truncatechars:15 }}</h5>
+            <h5 class="card-title pricing-card-title">Заголовок: {{ object.title|truncatechars:30 }}</h5>
             <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                 <li>Создан: {{ object.created }}</li>
             </ul>
+            <a class="btn btn-lg btn-block btn-outline-info" href="{% url 'reviews:detail_review' object.slug %}">Подробнее</a>
+            {% if user.is_staff %}
+            <a href="{% url 'reviews:update_review' object.slug %}" class="btn bt-lg btn-block btn-outline-warning">Изменить/Удалить</a>
+            {% endif %}
         </div>
     </div>
 </div>

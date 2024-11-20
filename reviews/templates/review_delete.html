@@ -1,0 +1,29 @@
+{% extends 'dogs/base.html' %}
+{% block content %}
+<form method="post" enctype="multipart/form-data" class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">
+                {% if object %}
+                Вы уверены что хотите удалить отзыв
+                {% endif %}
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ object.dog.name|title }}</p>
+                <p class="card-text">{{ object.title|title }}</p>
+            </div>
+            <div class="card-footer">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-outline-danger float-right">
+                    {% if object %}
+                    Удалить
+                    {% endif %}
+                </button>
+                <a href="{% url 'reviews:update_review' slug:slug %}" class="btn btn-outline-primary"><< Назад</a>
+            </div>
+
+        </div>
+    </div>
+</form>
+{% endblock %}
