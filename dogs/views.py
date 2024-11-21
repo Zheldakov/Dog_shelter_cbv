@@ -2,12 +2,13 @@ from lib2to3.fixes.fix_input import context
 
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, CreateView,  DetailView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 # миксин который выполняет классы только тогда когда пользователь зарегистрированный
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 # from django.http import Http404, HttpResponseForbidden
 from django.forms import inlineformset_factory
 from django.core.exceptions import PermissionDenied
+from django.db.models import Q
 
 from dogs.services import send_views_mail
 from users.models import UserRoles
@@ -33,6 +34,7 @@ class CategoryListView(LoginRequiredMixin, ListView):
     }
     template_name = 'dogs/categories.html'
 
+
 class DogDeactiveListView(LoginRequiredMixin, ListView):
     model = Dog
     extra_context = {
@@ -50,10 +52,19 @@ class DogDeactiveListView(LoginRequiredMixin, ListView):
         return queryset
 
 
+class DogSearchListView(LoginRequiredMixin, ListView):
+    """ Показывает страницу с результатами поиска собак."""
+    model = Dog
+    template_name = 'dogs/dogs_search_results.html'
+
+    def get_queryset(self):
+        return Dog.objects.filter(Q(name__icontains='Пушок'))
+
 class DogCategoryListView(ListView):
     """ Показывает страницу с информацией о питомцах определенной категории."""
     model = Dog
     template_name = 'dogs/dogs.html'
+
     def get_queryset(self):
         queryset = super().get_queryset().filter(
             category_id=self.kwargs.get('pk')
@@ -73,6 +84,7 @@ class DogListView(ListView):
         'title': "Питомник - Все наши собаки",
     }
     template_name = 'dogs/dogs.html'
+
     def get_queryset(self):
         # Фильтр показывает только активных собак
         queryset = super().get_queryset()
@@ -89,7 +101,7 @@ class DogCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         # Добавляем текущего пользователя в поле "владелец" нового питомца
-        if self.request.user.role != UserRoles.USER: # ограничивает служебные учетки
+        if self.request.user.role != UserRoles.USER:  # ограничивает служебные учетки
             raise PermissionDenied()
             # return HttpResponseForbidden("У вас нет прав для добавление собак") # только если ожидается перенаправление
         # form.instance.owner = self.request.user
@@ -112,13 +124,14 @@ class DogDetailView(LoginRequiredMixin, DetailView):
         context_data['title'] = f'{object.name} {object.category}'
         dog_object_increase = get_object_or_404(Dog, pk=object.pk)
         # if object.owner  != self.request.user and self.request.user.role not in [UserRoles.ADMIN, UserRoles.MODERATOR]:
-        if object.owner  != self.request.user:
+        if object.owner != self.request.user:
             dog_object_increase.views_count()
         if object.owner:
             object_owner_email = object.owner.email
-            if dog_object_increase.views % 100 == 0 and dog_object_increase.views !=0:
-                send_views_mail(dog_object_increase,object_owner_email,dog_object_increase.views)
+            if dog_object_increase.views % 100 == 0 and dog_object_increase.views != 0:
+                send_views_mail(dog_object_increase, object_owner_email, dog_object_increase.views)
         return context_data
+
 
 class DogUpdateView(LoginRequiredMixin, UpdateView):
     """ Страница изменения информации о питомце."""
@@ -161,13 +174,13 @@ class DogUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def get_form_class(self):
-        dog_forms ={
-            'admin':DogAdminForm,
-            'moderator':DogForm,
+        dog_forms = {
+            'admin': DogAdminForm,
+            'moderator': DogForm,
             'user': DogForm,
         }
         user_role = self.request.user.role
-        dog_form_class =dog_forms[user_role]
+        dog_form_class = dog_forms[user_role]
         return dog_form_class
 
 
@@ -177,12 +190,13 @@ class DogDeleteView(PermissionRequiredMixin, DeleteView):
     template_name = 'dogs/delete.html'
     # Переходим на страницу со списком питомцев после удаления
     success_url = reverse_lazy('dogs:list_dogs')
-    #------------------------------------------------------
+    # ------------------------------------------------------
     permission_required = 'dogs.delete_dog'
     # dogs.add_dog - PermissionRequiredMixin + CreateViwe
     # dogs.change_dog - PermissionRequiredMixin + UpdateViwe
     # dogs.view_dog - PermissionRequiredMixin + DetailViwe
     # ------------------------------------------------------
+
 
 def dog_toggle_activity(request, pk):
     dog_item = get_object_or_404(Dog, pk=pk)
