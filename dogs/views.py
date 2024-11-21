@@ -34,6 +34,18 @@ class CategoryListView(LoginRequiredMixin, ListView):
     }
     template_name = 'dogs/categories.html'
 
+class CategorySearchListView(LoginRequiredMixin, ListView):
+    """ Показывает страницу с результатами поиска собак."""
+    model = Category
+    template_name = 'dogs/categories.html'
+    extra_context = {
+        'title': 'Результаты поискового запроса',
+    }
+    def get_queryset(self):
+        query = self.request.GRT.get('q')
+        object_list =Category.objects.filter(Q(name__icontains=query))
+        return object_list
+
 
 class DogDeactiveListView(LoginRequiredMixin, ListView):
     model = Dog
@@ -61,7 +73,7 @@ class DogSearchListView(LoginRequiredMixin, ListView):
     }
     def get_queryset(self):
         query = self.request.GRT.get('q')
-        object_list =Dog.objects.filter(Q(name__icontains=query))
+        object_list =Dog.objects.filter(Q(name__icontains=query), is_active=True)
         return object_list
 
 class DogCategoryListView(ListView):
@@ -71,7 +83,7 @@ class DogCategoryListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset().filter(
-            category_id=self.kwargs.get('pk')
+            category_id=self.kwargs.get('pk'), is_active=True
         )
         # Опция которая позволяет закрыть страницу от пользователя (будет видить только своих собак)
         # if not self.request.user.is_staff:
