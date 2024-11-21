@@ -55,10 +55,14 @@ class DogDeactiveListView(LoginRequiredMixin, ListView):
 class DogSearchListView(LoginRequiredMixin, ListView):
     """ Показывает страницу с результатами поиска собак."""
     model = Dog
-    template_name = 'dogs/dogs_search_results.html'
-
+    template_name = 'dogs/dogs.html'
+    extra_context = {
+        'title': 'Результаты поискового запроса',
+    }
     def get_queryset(self):
-        return Dog.objects.filter(Q(name__icontains='Пушок'))
+        query = self.request.GRT.get('q')
+        object_list =Dog.objects.filter(Q(name__icontains=query))
+        return object_list
 
 class DogCategoryListView(ListView):
     """ Показывает страницу с информацией о питомцах определенной категории."""
