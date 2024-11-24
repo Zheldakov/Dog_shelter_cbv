@@ -79,8 +79,10 @@ class UserListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         # фильтр показывает только активных пользователей
-        queryset = super().queryset.filtr(is_active=True)
+        queryset = super().get_queryset()
+        queryset = queryset.filter(is_active=True)
         return queryset
+
 
 class UserViewProfileView(DetailView):
     """ Просмотр профиля пользователя."""
@@ -89,6 +91,7 @@ class UserViewProfileView(DetailView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
 
 @login_required
 def user_generate_new_password(request):
