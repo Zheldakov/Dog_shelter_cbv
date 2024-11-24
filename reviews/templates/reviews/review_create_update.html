@@ -21,10 +21,10 @@
                 {% if object %}
                 <a href="{% url 'reviews:toggle_activity_review' object.slug %}"
                    class="btn btn-outline-warning float-right">
-                    {% if object.sing_of_review %}
+                    {% if object.sign_of_review %}
                     Деактивировать
                     {% else %}
-                    Активировать
+                    Активировать!!!
                     {% endif %}
                 </a>
                 {% endif %}

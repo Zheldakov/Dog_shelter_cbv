@@ -54,7 +54,7 @@ class ReviewCreateView(CreateView):
         if self.object.slug == "temp_slug":
             self.object.slug = slug_generation()
             print(self.object.slug)
-        self.object.autor = self.request.user
+        self.object.author = self.request.user
         self.object.save()
         return super().form_valid(form)
 
@@ -103,7 +103,7 @@ def review_toggle_activity(request, slug):
     if review_item.sign_of_review:
         review_item.sign_of_review = False
         review_item.save()
-        return redirect(reverse('reviews:deactivated_reviews'))
+        return redirect(reverse('reviews:deactivated_reviews_list'))
     else:
         review_item.sign_of_review = True
         review_item.save()
