@@ -2,30 +2,31 @@
 {% load my_tags %}
 {% block content %}
 <div class="row">
-    <div class="col-3"></div>
-    <div class="col-6">
-        <div class="card">
-            <div class="card-header">Профиль пользователя</div>
-            <img class="card-img-top"
-                 src="{{ user.avatar|user_media }}" width="300" height="700"
-                 alt="Card image cap">
-            <div class="card-body">
-                <span class="card-text">Имя: {{user.first_name}}</span><br>
-                <span class="card-text">Фамилия: {{user.last_name}}</span><br>
-                <span class="card-text">Почта: {{user.email}}</span><br>
-                <span class="card-text">Телефон: {{user.phone|default:"не указано"}}</span><br>
-                <span class="card-text">Телеграмм: {{user.telegram|default:"не указано"}}</span><br>
-                <button class="btn btn-outline-primary">
-                    <a class="btn btn-link" href="{% url 'users:update_user' %}">обновить</a>
-                </button>
-                <button class="btn btn-outline-warning">
-                    <a class="btn btn-link" href="{% url 'users:change_password_user' %}">изменить пароль</a>
-                </button>
-                <button class="btn btn-outline-danger">
-                    <a class="btn btn-link" href="{% url 'users:generate_new_password_user' %}">генерация пароля</a>
-                </button>
+    <div class="col-3">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">Профиль пользователя</div>
+                <img class="card-img-top"
+                     src="{{ user.avatar|user_media }}" width="300" height="700"
+                     alt="Card image cap">
+                <div class="card-body">
+                    <span class="card-text">Имя: {{user.first_name}}</span><br>
+                    <span class="card-text">Фамилия: {{user.last_name}}</span><br>
+                    <span class="card-text">Почта: {{user.email}}</span><br>
+                    <span class="card-text">Телефон: {{user.phone|default:"не указано"}}</span><br>
+                    <span class="card-text">Телеграмм: {{user.telegram|default:"не указано"}}</span><br>
+                    <button class="btn btn-outline-primary">
+                        <a class="btn btn-link" href="{% url 'users:update_user' %}">обновить</a>
+                    </button>
+                    <button class="btn btn-outline-warning">
+                        <a class="btn btn-link" href="{% url 'users:change_password_user' %}">изменить пароль</a>
+                    </button>
+                    <button class="btn btn-outline-danger">
+                        <a class="btn btn-link" href="{% url 'users:generate_new_password_user' %}">генерация пароля</a>
+                    </button>
+                </div>
+                <div class="card-footer"></div>
             </div>
-            <div class="card-footer"></div>
         </div>
     </div>
 </div>
