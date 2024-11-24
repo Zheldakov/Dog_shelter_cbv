@@ -42,7 +42,7 @@ class CategorySearchListView(LoginRequiredMixin, ListView):
         'title': 'Результаты поискового запроса',
     }
     def get_queryset(self):
-        query = self.request.GRT.get('q')
+        query = self.request.GET.get('q')
         object_list =Category.objects.filter(Q(name__icontains=query))
         return object_list
 
@@ -72,7 +72,7 @@ class DogSearchListView(LoginRequiredMixin, ListView):
         'title': 'Результаты поискового запроса',
     }
     def get_queryset(self):
-        query = self.request.GRT.get('q')
+        query = self.request.GET.get('q')
         object_list =Dog.objects.filter(Q(name__icontains=query), is_active=True)
         return object_list
 
