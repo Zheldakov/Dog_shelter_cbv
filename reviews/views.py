@@ -19,11 +19,11 @@ class ReviewListView(LoginRequiredMixin, ListView):
     }
     template_name = 'reviews/reviews_list.html'
 
-    # def get_queryset(self):
-    #     queryset = super().queryset()
-    #     # queryset = queryset.filter(dog_pk=self.kwargs.get('pk'))
-    #     queryset = queryset.filter(sign_of_review=True)
-    #     return queryset
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        # queryset = queryset.filter(dog_pk=self.kwargs.get('pk'))
+        queryset = queryset.filter(sign_of_review=True)
+        return queryset
 
 
 class DeactivatedDogReviewListView(LoginRequiredMixin, ListView):
@@ -33,12 +33,12 @@ class DeactivatedDogReviewListView(LoginRequiredMixin, ListView):
     }
     template_name = 'reviews/reviews_list.html'
 
-    # def get_queryset(self):
-    #     queryset = super().queryset()
-    #     # queryset = queryset.filter(dog_pk=self.kwargs.get('pk'))
-    #     queryset = queryset.filter(sign_of_review=False)
-    #
-    #     return queryset
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        # queryset = queryset.filter(dog_pk=self.kwargs.get('pk'))
+        queryset = queryset.filter(sign_of_review=False)
+
+        return queryset
 
 
 class ReviewCreateView(CreateView):
