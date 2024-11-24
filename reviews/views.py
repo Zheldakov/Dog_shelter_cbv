@@ -46,6 +46,18 @@ class ReviewCreateView(CreateView):
     form_class = ReviewForm
     template_name ='reviews/review_create_update.html'
 
+    def form_valid(self, form):
+        if self.request.user.role not in [UserRoles.USER, UserRoles.ADMIN]:
+            return HttpResponseForbidden()
+        self.object = form.save()
+        print(self.object.slug)
+        if self.object.slug == "temp_slug":
+            self.object.slug = slug_generation()
+            print(self.object.slug)
+        self.object.autor = self.request.user
+        self.object.save()
+        return super().form_valid(form)
+
 class ReviewDetailView(LoginRequiredMixin,DeleteView):
     model = Review
     template_name ='reviews/review_detail.html'
