@@ -12,7 +12,7 @@
             </ul>
             <a class="btn btn-lg btn-block btn-outline-info" href="{% url 'reviews:detail_review' object.slug %}">Подробнее</a>
             {% if user.is_staff %}
-            <a href="{% url 'reviews:update_review' object.slug %}" class="btn bt-lg btn-block btn-outline-warning">Изменить/Удалить</a>
+            <a href="{% url 'reviews:create_update_review' object.slug %}" class="btn bt-lg btn-block btn-outline-warning">Изменить/Удалить</a>
             {% elif object.author == user %}
             <a href="{% url 'reviews:update_review' object.slug %}" class="btn bt-lg btn-block btn-outline-warning">Изменить</a>
             {% endif %}

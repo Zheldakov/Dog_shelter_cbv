@@ -23,7 +23,6 @@ class ReviewListView(LoginRequiredMixin, ListView):
     #     queryset = super().queryset()
     #     # queryset = queryset.filter(dog_pk=self.kwargs.get('pk'))
     #     queryset = queryset.filter(sign_of_review=True)
-    #
     #     return queryset
 
 
@@ -32,14 +31,14 @@ class DeactivatedDogReviewListView(LoginRequiredMixin, ListView):
     extra_context = {
         'title': 'Неактивные отзывы'
     }
-    template_name = 'reviews/reviews.html'
+    template_name = 'reviews/reviews_list.html'
 
-    def get_queryset(self):
-        queryset = super().queryset()
-        queryset = queryset.filter(dog_pk=self.kwargs.get('pk'))
-        queryset = queryset.filter(sign_of_review=False)
-
-        return queryset
+    # def get_queryset(self):
+    #     queryset = super().queryset()
+    #     # queryset = queryset.filter(dog_pk=self.kwargs.get('pk'))
+    #     queryset = queryset.filter(sign_of_review=False)
+    #
+    #     return queryset
 
 
 class ReviewCreateView(CreateView):
@@ -74,7 +73,7 @@ class ReviewUpdateView(LoginRequiredMixin,DeleteView):
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
-        if self.object.autor != self.request.user and self.request.user not in [UserRoles.ADMIN, UserRoles.MODERATOR]:
+        if self.object.author != self.request.user and self.request.user not in [UserRoles.ADMIN, UserRoles.MODERATOR]:
             raise PermissionDenied()
         return self.object
 

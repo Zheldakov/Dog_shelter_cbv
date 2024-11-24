@@ -30,7 +30,7 @@
                 {% endif %}
             </div>
             <div class="card-footer">
-                <a href="{% url 'reviews:list_review' %}" class="btn btn-outline-primary"><< Назад</a>
+                <a href="{% url 'reviews:list_reviews' %}" class="btn btn-outline-primary"><< Назад</a>
                 {% if object and user.is_superuser %}
                 <a href="{% url 'reviews:delete_review' object.slug %}" class="btn btn-outline-danger float-right">Удалить</a>
                 {% endif %}
