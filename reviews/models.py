@@ -23,7 +23,7 @@ class Review(models.Model):
 
     def get_absolute_url(self):
         # Возвращает абсолютный URL для страницы детального отзыва
-        return reverse('reviews:detail', kwargs={'slug': self.slug})
+        return reverse('reviews:detail_review', kwargs={'slug': self.slug})
 
     class Meta:
         verbose_name = 'Отзыв'

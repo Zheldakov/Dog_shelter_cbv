@@ -17,14 +17,14 @@ class ReviewListView(LoginRequiredMixin, ListView):
     extra_context = {
         'title': 'Питомник - Все отзывы по собаке'
     }
-    template_name = 'reviews/reviews.html'
+    template_name = 'reviews/reviews_list.html'
 
-    def get_queryset(self):
-        queryset = super().queryset()
-        # queryset = queryset.filter(dog_pk=self.kwargs.get('pk'))
-        queryset = queryset.filter(sign_of_review=True)
-
-        return queryset
+    # def get_queryset(self):
+    #     queryset = super().queryset()
+    #     # queryset = queryset.filter(dog_pk=self.kwargs.get('pk'))
+    #     queryset = queryset.filter(sign_of_review=True)
+    #
+    #     return queryset
 
 
 class DeactivatedDogReviewListView(LoginRequiredMixin, ListView):
