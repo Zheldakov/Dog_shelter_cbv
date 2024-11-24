@@ -86,8 +86,8 @@ class ReviewDeleteView(PermissionRequiredMixin, DeleteView):
         return reverse('reviews:list_reviews')
 
 
-def review_toggle_activity(request, sjug):
-    review_item = get_object_or_404(Review, slug=sjug)
+def review_toggle_activity(request, slug):
+    review_item = get_object_or_404(Review, slug=slug)
     if review_item.sign_of_review:
         review_item.sign_of_review = False
         review_item.save()

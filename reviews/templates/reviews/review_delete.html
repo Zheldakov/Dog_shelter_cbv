@@ -20,7 +20,7 @@
                     Удалить
                     {% endif %}
                 </button>
-                <a href="{% url 'reviews:update_review' slug:slug %}" class="btn btn-outline-primary"><< Назад</a>
+                <a href="{% url 'reviews:create_update_review' object.slug %}" class="btn btn-outline-primary"><< Назад</a>
             </div>
 
         </div>
