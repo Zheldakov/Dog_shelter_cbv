@@ -12,6 +12,7 @@ from reviews.utils import slug_generation
 
 
 class ReviewListView(LoginRequiredMixin, ListView):
+    """Отображение всех активных отзывов"""
     model = Review
     paginate_by = 3
     extra_context = {
@@ -20,6 +21,7 @@ class ReviewListView(LoginRequiredMixin, ListView):
     template_name = 'reviews/reviews_list.html'
 
     def get_queryset(self):
+        # фильтр по активным отзывам
         queryset = super().get_queryset()
         # queryset = queryset.filter(dog_pk=self.kwargs.get('pk'))
         queryset = queryset.filter(sign_of_review=True)
@@ -27,6 +29,7 @@ class ReviewListView(LoginRequiredMixin, ListView):
 
 
 class DeactivatedDogReviewListView(LoginRequiredMixin, ListView):
+    """Отображение всех неактивных отзывов"""
     model = Review
     extra_context = {
         'title': 'Неактивные отзывы'
@@ -34,6 +37,7 @@ class DeactivatedDogReviewListView(LoginRequiredMixin, ListView):
     template_name = 'reviews/reviews_list.html'
 
     def get_queryset(self):
+        # фильтр по неактивным отзывам
         queryset = super().get_queryset()
         # queryset = queryset.filter(dog_pk=self.kwargs.get('pk'))
         queryset = queryset.filter(sign_of_review=False)
@@ -42,11 +46,15 @@ class DeactivatedDogReviewListView(LoginRequiredMixin, ListView):
 
 
 class ReviewCreateView(CreateView):
+    """Создание нового отзыва"""
     model = Review
     form_class = ReviewForm
     template_name ='reviews/review_create_update.html'
 
     def form_valid(self, form):
+        # валидация формы, где прописаны:
+        # изменение slug для уникальности URL-адреса,
+        # проверка наличия прав пользователя
         if self.request.user.role not in [UserRoles.USER, UserRoles.ADMIN]:
             return HttpResponseForbidden()
         self.object = form.save()
@@ -59,18 +67,20 @@ class ReviewCreateView(CreateView):
         return super().form_valid(form)
 
 class ReviewDetailView(LoginRequiredMixin,DetailView):
+    """Просмотр одного отзыва"""
     model = Review
     template_name ='reviews/review_detail.html'
 
 class ReviewUpdateView(LoginRequiredMixin,UpdateView):
+    """Редактирование отзыва"""
     model = Review
     form_class = ReviewForm
     template_name ='reviews/review_create_update.html'
 
     def form_valid(self,form):
-        # волидация формы, где происаны:
-        # изменение slug для уникальности URL-адреса.
-        # Проверка наличия прав для изменения отзыва.
+        # валидация формы, где прописаны:
+        # изменение slug для уникальности URL-адреса,
+        # проверка наличия прав пользователя
         if self.request.user.role not in [UserRoles.USER, UserRoles.ADMIN]:
             return HttpResponseForbidden()
         self.object = form.save()
@@ -84,7 +94,7 @@ class ReviewUpdateView(LoginRequiredMixin,UpdateView):
 
 
     def get_success_url(self):
-        #
+        # перенаправление на страницу с детальным описанием отзыва после редактирования.
         return reverse('reviews:detail_review', args=[self.kwargs.get('slug')])
 
     def get_object(self, queryset=None):
@@ -95,15 +105,18 @@ class ReviewUpdateView(LoginRequiredMixin,UpdateView):
         return self.object
 
 class ReviewDeleteView(PermissionRequiredMixin, DeleteView):
+    """Удаление отзыва"""
     model = Review
     template_name ='reviews/review_delete.html'
     permission_required = 'reviews.delete_review'
 
     def get_success_url(self):
+        # перенаправление на страницу со списком отзывов после удаления.
         return reverse('reviews:list_reviews')
 
 
 def review_toggle_activity(request, slug):
+
     review_item = get_object_or_404(Review, slug=slug)
     if review_item.sign_of_review:
         review_item.sign_of_review = False
