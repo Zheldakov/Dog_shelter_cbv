@@ -13,6 +13,7 @@ def send_register_email(email):
 
 
 def send_new_password(email, new_password):
+    # Отправка письма с информацией о новом пароле
     send_mail(
         subject="Вы успешно изменили пароль",
         message=f"Ваш новый пароль {new_password}",

@@ -9,6 +9,7 @@ from users.models import User
 from users.validators import validate_password
 
 class StyleFromMixin:
+    """Миксин для добавления стилей к формам."""
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
@@ -58,6 +59,7 @@ class UserPasswordChangeForm(StyleFromMixin, PasswordChangeForm):
     """ Форма для смены пароля."""
 
     def clean_new_password2(self):
+        # Проверка соответствия паролей
         password1 = self.cleaned_data.get("new_password1")
         password2 = self.cleaned_data.get("new_password2")
         validate_password(password1)

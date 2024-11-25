@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 
 
 def validate_password(field):
+    # Проверка пароля на соответствие шаблону и длине
     pattern = re.compile(r'^[A-Za-z0-9]+$')
     language = settings.LANGUAGE_CODE
     error_message = [
