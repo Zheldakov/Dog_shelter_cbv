@@ -13,6 +13,7 @@ class DogForm(StyleFromMixin, forms.ModelForm):
         exclude = ('owner', 'is_active', 'views')
 
     def clean_birth_date(self):
+        # Проверка соответствия даты рождения питомца
         cleaned_data = self.cleaned_data['birth_date']
         if cleaned_data is None:
             return None
@@ -24,6 +25,7 @@ class DogForm(StyleFromMixin, forms.ModelForm):
 
 
 class DogAdminForm(StyleFromMixin, forms.ModelForm):
+    # Создаем форму для редактирования питомца с указанными полями
     class Meta:
         model = Dog
         exclude = '__all__'

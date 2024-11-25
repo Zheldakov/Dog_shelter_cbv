@@ -6,6 +6,7 @@ NULLABLE = {'blank': True, 'null': True}
 
 
 class Category(models.Model):
+    """Породы собак"""
     name = models.CharField(max_length=100, verbose_name='breed', **NULLABLE)  # `имя породы (категории)
     description = models.CharField(max_length=150, verbose_name='description', **NULLABLE)  # описание породы
 
@@ -18,6 +19,7 @@ class Category(models.Model):
 
 
 class Dog(models.Model):
+    """Собаки"""
     name = models.CharField(max_length=250, verbose_name='dog_name', **NULLABLE)  # имя собаки
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='breed')  # порода собаки
     photo = models.ImageField(upload_to='dogs/', verbose_name='image', **NULLABLE)  # фотография собаки
@@ -36,6 +38,7 @@ class Dog(models.Model):
         verbose_name_plural = 'dogs'  # собаки
 
     def views_count(self):
+        # Каждый раз, когда собака отображается, увеличивается счетчик просмотров
         self.views += 1
         self.save()
 
@@ -43,6 +46,7 @@ class Dog(models.Model):
 
 
 class Parent(models.Model):
+    """Родители собак"""
     dog = models.ForeignKey(Dog, on_delete=models.CASCADE)
     name = models.CharField(max_length=250, verbose_name='dog_name')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="breed")

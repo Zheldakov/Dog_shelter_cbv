@@ -28,6 +28,7 @@ def index(request):
 
 
 class CategoryListView(LoginRequiredMixin, ListView):
+    """ Список всех категорий."""
     model = Category
     extra_context = {
         'title': 'Питомник - Все наши породы'
@@ -48,6 +49,7 @@ class CategorySearchListView(LoginRequiredMixin, ListView):
 
 
 class DogDeactiveListView(LoginRequiredMixin, ListView):
+
     model = Dog
     extra_context = {
         'title': 'Питомник - неактивные собаки'
@@ -72,6 +74,7 @@ class DogSearchListView(LoginRequiredMixin, ListView):
         'title': 'Результаты поискового запроса',
     }
     def get_queryset(self):
+        # Фильтр по вводимым данным в строку поиска
         query = self.request.GET.get('q')
         object_list =Dog.objects.filter(Q(name__icontains=query), is_active=True)
         return object_list
@@ -82,6 +85,7 @@ class DogCategoryListView(ListView):
     template_name = 'dogs/dogs.html'
 
     def get_queryset(self):
+        # Фильтр показывает только активных собак определенной категории
         queryset = super().get_queryset().filter(
             category_id=self.kwargs.get('pk'), is_active=True
         )
@@ -190,6 +194,7 @@ class DogUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def get_form_class(self):
+        # Выбираем форму для редактирования питомца в зависимости от роли пользователя
         dog_forms = {
             'admin': DogAdminForm,
             'moderator': DogForm,
@@ -215,6 +220,7 @@ class DogDeleteView(PermissionRequiredMixin, DeleteView):
 
 
 def dog_toggle_activity(request, pk):
+    """ Переключение активности питомца."""
     dog_item = get_object_or_404(Dog, pk=pk)
     if dog_item.is_active:
         dog_item.is_active = False
