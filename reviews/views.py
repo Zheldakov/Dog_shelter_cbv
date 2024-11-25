@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.shortcuts import render
 from django.http import HttpResponseForbidden
 from django.shortcuts import reverse, get_object_or_404, redirect
-from django.views.generic import CreateView, CreateView, DeleteView, UpdateView, ListView
+from django.views.generic import CreateView, CreateView, DeleteView, UpdateView, ListView, DetailView
 from django.core.exceptions import PermissionDenied
 
 from reviews.models import Review
@@ -58,16 +58,19 @@ class ReviewCreateView(CreateView):
         self.object.save()
         return super().form_valid(form)
 
-class ReviewDetailView(LoginRequiredMixin,DeleteView):
+class ReviewDetailView(LoginRequiredMixin,DetailView):
     model = Review
     template_name ='reviews/review_detail.html'
 
-class ReviewUpdateView(LoginRequiredMixin,DeleteView):
+class ReviewUpdateView(LoginRequiredMixin,UpdateView):
     model = Review
     form_class = ReviewForm
     template_name ='reviews/review_create_update.html'
 
     def form_valid(self,form):
+        # волидация формы, где происаны:
+        # изменение slug для уникальности URL-адреса.
+        # Проверка наличия прав для изменения отзыва.
         if self.request.user.role not in [UserRoles.USER, UserRoles.ADMIN]:
             return HttpResponseForbidden()
         self.object = form.save()
@@ -81,9 +84,11 @@ class ReviewUpdateView(LoginRequiredMixin,DeleteView):
 
 
     def get_success_url(self):
+        #
         return reverse('reviews:detail_review', args=[self.kwargs.get('slug')])
 
     def get_object(self, queryset=None):
+        # Проверка наличия прав для просмотра отзыва.
         self.object = super().get_object(queryset)
         if self.object.author != self.request.user and self.request.user not in [UserRoles.ADMIN, UserRoles.MODERATOR]:
             raise PermissionDenied()
